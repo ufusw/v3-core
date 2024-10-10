@@ -502,23 +502,6 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
 
         emit Mint(msg.sender, recipient, tickLower, tickUpper, amount, amount0, amount1);
     }
-
-    function swapStep(uint160 sqrtPriceX96, uint160 sqrtPriceLimitX96, uint160 sqrtPriceNextX96, uint128 liquidity, int256 amountSpecifiedRemaining, bool zeroForOne) external returns (
-        uint160 sqrtRatioNextX96,
-        uint256 amountIn,
-        uint256 amountOut,
-        uint256 feeAmount
-    ) {
-        return SwapMath.computeSwapStep(
-            sqrtPriceX96,
-            (zeroForOne ? sqrtPriceNextX96 < sqrtPriceLimitX96 : sqrtPriceNextX96 > sqrtPriceLimitX96)
-                ? sqrtPriceLimitX96
-                : sqrtPriceNextX96,
-            liquidity,
-            amountSpecifiedRemaining,
-            3000
-        );
-    }
     /// @inheritdoc IUniswapV3PoolActions
     function collect(
         address recipient,
