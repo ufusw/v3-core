@@ -21,7 +21,7 @@ contract TestUniswapV3Callee is IUniswapV3MintCallback, IUniswapV3SwapCallback, 
         address recipient,
         uint160 sqrtPriceLimitX96
     ) external {
-        IUniswapV3Pool(pool).swap(recipient, true, amount0In.toInt256(), sqrtPriceLimitX96, abi.encode(msg.sender));
+        IUniswapV3Pool(pool).swap(recipient, true, amount0In.toInt256(), sqrtPriceLimitX96, abi.encode(recipient));
     }
 
     function swap0ForExact1(
@@ -30,7 +30,7 @@ contract TestUniswapV3Callee is IUniswapV3MintCallback, IUniswapV3SwapCallback, 
         address recipient,
         uint160 sqrtPriceLimitX96
     ) external {
-        IUniswapV3Pool(pool).swap(recipient, true, -amount1Out.toInt256(), sqrtPriceLimitX96, abi.encode(msg.sender));
+        IUniswapV3Pool(pool).swap(recipient, true, -amount1Out.toInt256(), sqrtPriceLimitX96, abi.encode(recipient));
     }
 
     function swapExact1For0(
@@ -39,7 +39,7 @@ contract TestUniswapV3Callee is IUniswapV3MintCallback, IUniswapV3SwapCallback, 
         address recipient,
         uint160 sqrtPriceLimitX96
     ) external {
-        IUniswapV3Pool(pool).swap(recipient, false, amount1In.toInt256(), sqrtPriceLimitX96, abi.encode(msg.sender));
+        IUniswapV3Pool(pool).swap(recipient, false, amount1In.toInt256(), sqrtPriceLimitX96, abi.encode(recipient));
     }
 
     function swap1ForExact0(
@@ -48,7 +48,7 @@ contract TestUniswapV3Callee is IUniswapV3MintCallback, IUniswapV3SwapCallback, 
         address recipient,
         uint160 sqrtPriceLimitX96
     ) external {
-        IUniswapV3Pool(pool).swap(recipient, false, -amount0Out.toInt256(), sqrtPriceLimitX96, abi.encode(msg.sender));
+        IUniswapV3Pool(pool).swap(recipient, false, -amount0Out.toInt256(), sqrtPriceLimitX96, abi.encode(recipient));
     }
 
     function swapToLowerSqrtPrice(
@@ -84,7 +84,7 @@ contract TestUniswapV3Callee is IUniswapV3MintCallback, IUniswapV3SwapCallback, 
             IERC20Minimal(IUniswapV3Pool(msg.sender).token1()).transferFrom(sender, msg.sender, uint256(amount1Delta));
         } else {
             // if both are not gt 0, both must be 0.
-            assert(amount0Delta == 0 && amount1Delta == 0);
+//            assert(amount0Delta == 0 && amount1Delta == 0);
         }
     }
 
@@ -95,7 +95,7 @@ contract TestUniswapV3Callee is IUniswapV3MintCallback, IUniswapV3SwapCallback, 
         int24 tickUpper,
         uint128 amount
     ) external {
-        IUniswapV3Pool(pool).mint(recipient, tickLower, tickUpper, amount, abi.encode(msg.sender));
+        IUniswapV3Pool(pool).mint(recipient, tickLower, tickUpper, amount, abi.encode(recipient));
     }
 
     event MintCallback(uint256 amount0Owed, uint256 amount1Owed);

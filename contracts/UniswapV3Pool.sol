@@ -494,11 +494,11 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
 
         uint256 balance0Before;
         uint256 balance1Before;
-//        if (amount0 > 0) balance0Before = balance0();
-//        if (amount1 > 0) balance1Before = balance1();
-//        IUniswapV3MintCallback(msg.sender).uniswapV3MintCallback(amount0, amount1, data);
-//        if (amount0 > 0) require(balance0Before.add(amount0) <= balance0(), 'M0');
-//        if (amount1 > 0) require(balance1Before.add(amount1) <= balance1(), 'M1');
+        if (amount0 > 0) balance0Before = balance0();
+        if (amount1 > 0) balance1Before = balance1();
+        IUniswapV3MintCallback(msg.sender).uniswapV3MintCallback(amount0, amount1, data);
+        if (amount0 > 0) require(balance0Before.add(amount0) <= balance0(), 'M0');
+        if (amount1 > 0) require(balance1Before.add(amount1) <= balance1(), 'M1');
 
         emit Mint(msg.sender, recipient, tickLower, tickUpper, amount, amount0, amount1);
     }
@@ -785,19 +785,19 @@ contract UniswapV3Pool is IUniswapV3Pool, NoDelegateCall {
             : (state.amountCalculated, amountSpecified - state.amountSpecifiedRemaining);
 
         // do the transfers and collect payment
-//        if (zeroForOne) {
-//            if (amount1 < 0) TransferHelper.safeTransfer(token1, recipient, uint256(-amount1));
-//
-//            uint256 balance0Before = balance0();
-//            IUniswapV3SwapCallback(msg.sender).uniswapV3SwapCallback(amount0, amount1, data);
-//            require(balance0Before.add(uint256(amount0)) <= balance0(), 'IIA');
-//        } else {
-//            if (amount0 < 0) TransferHelper.safeTransfer(token0, recipient, uint256(-amount0));
-//
-//            uint256 balance1Before = balance1();
-//            IUniswapV3SwapCallback(msg.sender).uniswapV3SwapCallback(amount0, amount1, data);
-//            require(balance1Before.add(uint256(amount1)) <= balance1(), 'IIA');
-//        }
+        if (zeroForOne) {
+            if (amount1 < 0) TransferHelper.safeTransfer(token1, recipient, uint256(-amount1));
+
+            uint256 balance0Before = balance0();
+            IUniswapV3SwapCallback(msg.sender).uniswapV3SwapCallback(amount0, amount1, data);
+            require(balance0Before.add(uint256(amount0)) <= balance0(), 'IIA');
+        } else {
+            if (amount0 < 0) TransferHelper.safeTransfer(token0, recipient, uint256(-amount0));
+
+            uint256 balance1Before = balance1();
+            IUniswapV3SwapCallback(msg.sender).uniswapV3SwapCallback(amount0, amount1, data);
+            require(balance1Before.add(uint256(amount1)) <= balance1(), 'IIA');
+        }
 
         emit Swap(msg.sender, recipient, amount0, amount1, state.sqrtPriceX96, state.liquidity, state.tick);
         slot0.unlocked = true;
